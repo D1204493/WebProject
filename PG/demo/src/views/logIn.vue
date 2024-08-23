@@ -1,26 +1,30 @@
 
 <template>
-  <main>
     <!-- <div id="userDataDisplay"></div> -->
-
+<div class="html1">
+ <div class="body1">
+  <main>
     <div class="wrapper">
         <div class="content">
             <div class="ig-img">
-                <img class="img-ig" src="/PG/demo/public/img_logo/logo.png" alt="logo">
+                <!-- 連結到主頁面 -->
+                <router-link to="/" class="nav-link">
+                    <img class="img-ig" src="/img_logo/logo.png" alt="logo">
+                </router-link>
             </div>
-            <form autocomplete="off" action="">
+            <form autocomplete="off" action="" @submit.prevent="handleLogin">
                 <div class="input-group">
                     <label>
-                        <input type="text" id="username" required>
+                        <input type="text" id="username" v-model="username" required>
                         <span>Phone number, username, or email</span>
                     </label>
                     <label class="label">
-                        <input type="password" id="password" required>
+                        <input type="password" id="password" v-model="password" required>
                         <span>Password</span>
-                        <button type="button" id="togglePassword" class="showhide">Show</button>
+                        <button type="button" id="togglePassword" class="showhide" @click="togglePasswordVisibility">Show</button>
                     </label>
                 </div>
-                <button id="loginButton" disabled>Log in</button>
+                <button id="loginButton" :disabled="isLoginButtonDisabled">Log in</button>
             </form>
             <div class="or-text">
                 <span></span>
@@ -28,163 +32,154 @@
                 <span></span>
             </div>
             <div class="btns">
-                <button onclick="window.location.href='https://www.facebook.com/?locale=zh_TW';">
-                    <span><img class="fb-logo" src="/PG/demo/public/img_logo/fbLogo.png" alt="FB Logo"></span>
+                <button @click="redirectToFacebook">
+                    <span><img class="fb-logo" src="/img_logo/fbLogo.png" alt="FB Logo"></span>
                     <span id="loginFB">Log in with Facebook</span>
                 </button>
-                <button onclick="window.location.href='https://www.instagram.com/';">
-                    <span><img class="ig-logo" src="/PG/demo/public/img_logo/igLogo.jpeg" alt="IG Logo"></span>
+                <button @click="redirectToInstagram">
+                    <span><img class="ig-logo" src="/img_logo/igLogo.jpeg" alt="IG Logo"></span>
                     <span id="loginIG">Log in with Instagram</span>
                 </button>
 
-                <button id="forget">Forget password?</button>
+                <button id="forget" @click="handleForgetPassword">Forget password?</button>
             </div>
         </div>
     </div>
     <div class="sign-up">
-        <p>Don't have an account? <a href="test_signUp.html">Sign up</a></p>
+        <!-- 連結到 signUp.vue -->
+        <router-link to="/signUp" class="nav-link">
+            <p>Don't have an account? <a href="test_signUp.html">Sign up</a></p>
+        </router-link>
     </div>
+
   </main>
+ </div>
+</div>
 </template>
   
 
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
-    const togglePassword = document.getElementById("togglePassword");
-    const loginButton = document.getElementById("loginButton");
-
-    // 顯示或隱藏密碼
-    togglePassword.addEventListener("click", () => {
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            togglePassword.innerHTML = "Hide";
-        } else {
-            passwordInput.type = "password";
-            togglePassword.innerHTML = "Show";
-        }
-    });
-
-    // 更新密碼可見性切換按鈕
-    const updateToggleButtonVisibility = () => {
-        togglePassword.style.visibility = passwordInput.value.trim() === "" ? "hidden" : "visible";
+export default {
+  name: 'logIn',
+  data() {
+    return {
+      username: '',
+      password: '',
+      passwordVisible: false
+    };
+  },
+  computed: {
+    isLoginButtonDisabled() {
+      return this.username.trim() === '' || this.password.trim() === '';
     }
+  },
+  methods: {
+    togglePasswordVisibility() {
+      this.passwordVisible = !this.passwordVisible;
+      const passwordInput = document.getElementById("password");
+      passwordInput.type = this.passwordVisible ? 'text' : 'password';
+      const togglePasswordButton = document.getElementById("togglePassword");
+      togglePasswordButton.innerHTML = this.passwordVisible ? 'Hide' : 'Show';
+    },
+    async handleLogin() {
+      console.log("Input username:", this.username.trim());
+      console.log("Input password:", this.password.trim());
 
-    updateToggleButtonVisibility();
+      // 先檢查 localStorage
+      const storedUserData = JSON.parse(localStorage.getItem("userData"));
+      console.log("Stored user data:", storedUserData);
 
-    // 當用戶輸入密碼時，更新按鈕狀態和切換按鈕可見性
-    passwordInput.addEventListener("input", () => {
-        updateToggleButtonVisibility();
-        loginButton.disabled = !(usernameInput.value.trim() !== "" && passwordInput.value.trim() !== "");
-    });
+      if (storedUserData) {
+        // 使用 localStorage 中的數據進行驗證
+        if (this.validateUser(this.username.trim(), this.password.trim(), storedUserData)) {
+            this.handleLoginSuccess();
 
-    // 當用戶輸入帳號時，更新按鈕狀態
-    usernameInput.addEventListener("input", () => {
-        loginButton.disabled = !(usernameInput.value.trim() !== "" && passwordInput.value.trim() !== "");
-    });
-
-    // 處理登入邏輯
-    loginButton.addEventListener("click", async (e) => {
-        e.preventDefault();
-
-        const inputUsername = usernameInput.value.trim();
-        const inputPassword = passwordInput.value.trim();
-
-        // 先檢查 localStorage
-        const storedUserData = JSON.parse(localStorage.getItem("userData"));
-
-        if (storedUserData) {
-            // 使用 localStorage 中的數據進行驗證
-            if (validateUser(inputUsername, inputPassword, storedUserData)) {
-                alert('Login successful!');
-                // 可以在這裡進行登入成功後的操作
-            } else {
-                // 如果 localStorage 驗證失敗，嘗試從 JSON 檔案驗證
-                const jsonUserData = await fetchJsonUserData();
-                if (validateUser(inputUsername, inputPassword, jsonUserData)) {
-                    alert('Login successful!');
-                    // 可以在這裡進行登入成功後的操作
-                } else {
-                    alert('Invalid username or password.');
-                }
-            }
         } else {
-            // 如果 localStorage 中沒有數據，直接從 JSON 檔案驗證
-            const jsonUserData = await fetchJsonUserData();
-            if (validateUser(inputUsername, inputPassword, jsonUserData)) {
-                alert('Login successful!');
-                // 可以在這裡進行登入成功後的操作
-            } else {
-                alert('Invalid username or password.');
-            }
+          // 如果 localStorage 驗證失敗，嘗試從 JSON 檔案驗證
+          const jsonUserData = await this.fetchJsonUserData();
+          if (this.validateUser(this.username.trim(), this.password.trim(), jsonUserData)) {
+            this.handleLoginSuccess();
+          } else {
+            alert('Invalid username or password.');
+          }
         }
-    });
+      } else {
+        // 如果 localStorage 中沒有數據，直接從 JSON 檔案驗證
+        const jsonUserData = await this.fetchJsonUserData();
+        if (this.validateUser(this.username.trim(), this.password.trim(), jsonUserData)) {
+            this.handleLoginSuccess();
+        } else {
+          alert('Invalid username or password.');
+        }
+      }
+    },
 
-    /*
-    // 顯示從 SignUp 返回的資料
-    const storedUserData = JSON.parse(localStorage.getItem("userData"));
+    handleLoginSuccess() {
+      // 更新 localStorage 或 Vuex 中的登錄狀態
+      localStorage.setItem('authToken', 'your-auth-token'); // 儲存 token
+      alert('Login successful!');
+      this.username = '';
+      this.password = '';
+      this.$router.push('/'); // 跳轉至主頁
+    },
 
-    if (storedUserData) {
-        document.getElementById("userDataDisplay").textContent = 
-            `Username: ${storedUserData.username}, 
-            Phone Number: ${storedUserData.phonenumber}, 
-            Email: ${storedUserData.email}`;
-    } else {
-        document.getElementById("userDataDisplay").textContent = "No user data found.";
-    }
-
-    console.log("Retrieved user data:", storedUserData);
-    */
-
-});
-
-// 驗證用戶函數
-function validateUser(inputUsername, inputPassword, userData) {
-  if (Array.isArray(userData)) {
-    return userData.some(user => 
-      (inputUsername === user.username || 
-       inputUsername === user.phonenumber || 
-       inputUsername === user.email) && 
-      inputPassword === user.password
-    );
-  } else {
-    const { username, phonenumber, email, password } = userData;
-    return (inputUsername === username || 
-            inputUsername === phonenumber || 
-            inputUsername === email) && 
-           inputPassword === password;
-  }
-}
-
-// 從 JSON 檔案獲取用戶數據
-async function fetchJsonUserData() {
-    try {
-        const response = await fetch('user.json');
+    validateUser(inputUsername, inputPassword, userData) {
+      console.log("Validating:", inputUsername, inputPassword, userData);
+      if (Array.isArray(userData)) {
+        return userData.some(user => 
+          (inputUsername === user.username || 
+           inputUsername === user.phonenumber || 
+           inputUsername === user.email) && 
+          inputPassword === user.password
+        );
+      } else {
+        const { username, phonenumber, email, password } = userData;
+        return (inputUsername === username || 
+                inputUsername === phonenumber || 
+                inputUsername === email) && 
+               inputPassword === password;
+      }
+    },
+    async fetchJsonUserData() {
+      try {
+        const response = await fetch('/user.json');
         if (!response.ok) {
-            throw new Error('Failed to fetch user data');
+          throw new Error('Failed to fetch user data');
         }
-        return await response.json();
-    } catch (error) {
+        const data = await response.json();
+        console.log("Fetched user data:", data);
+        return data;
+      } catch (error) {
         console.error('Error fetching user data:', error);
         return null;
+      }
+    },
+    redirectToFacebook() {
+      window.location.href = 'https://www.facebook.com/?locale=zh_TW';
+    },
+    redirectToInstagram() {
+      window.location.href = 'https://www.instagram.com/';
+    },
+    handleForgetPassword() {
+      // 忘記密碼的處理方式
+      window.location.href = 'https://account.voicetube.com/reset-password?service=voicetube&next=https%3A%2F%2Ftw.voicetube.com%2F';
     }
-}
-
+  }
+};
 </script>
   
 
 
-<style>
-        * {
+<style scoped>
+        .html1 {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: sans-serif;
         }
 
-        body {
+        .body1 {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -216,62 +211,17 @@ async function fetchJsonUserData() {
 
         
         .fb-logo {
-            width: 70%;
-            height: 70%;
+            width: 40px; /* 調整大小 */
+            height: 40px;
+            object-fit: contain;
         }
 
         .ig-logo {
             width: 24px;
             height: 24px;
-            margin-right: 15px;
-            margin-left: 20px;
+            margin-right: 7px;
+            margin-left: 12px;
             object-fit: cover;
-        }
-
-        .a {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .b {
-            border: 0;
-            font: inherit;
-            font-size: 15px;
-            line-height: 18px;
-            margin: 10px 20px;
-            padding: 0;
-            text-align: center;
-            vertical-align: baseline;
-        }
-
-        .d {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            margin: 10px 0;
-        }
-
-        .download-logo {
-            height: 40px;
-        }
-
-        .words {
-            color: rgb(115, 115, 115);
-        }
-
-        .lang {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-        }
-
-        .lang-1 {
-            display: flex;
-            flex-direction: column;
-            line-height: 18px;
-            margin-bottom: 12px;
-            margin-left: 8px;
-            margin-right: 8px;
         }
 
         form {
