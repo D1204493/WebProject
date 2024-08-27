@@ -7,9 +7,13 @@
 
     <!-- Card 圖 -->
     <div class="row justify-content-center" id="medalTable">
-            <div v-for="set in setList" :key="set.name" class="country-card col-lg-2 col-md-3 col-sm-4 col-6">
-                <card :setName="set.name" :setImg="set.img" />
-            </div> 
+      <div v-if="mainIsVisible" class="row justify-content-center" id="medalTable">
+        <div v-for="set in setList" :key="set.name" class="country-card col-lg-2 col-md-3 col-sm-4 col-6">
+          <card :setName="set.name" :setImg="set.img" @showChapt1 = "showChapt1" />
+        </div>
+      </div>
+
+      <chapt1 v-if="chapt1isVisible" :chapt1Data="chapt1Data"  @closePgn = "closePage" />
 
         <!-- 頁碼 -->
         <pagination />
@@ -21,7 +25,15 @@
   
 
 <script>
+//導入載入中英文對話句子的檔案
+//導入讀取json檔案的程式loadFile
+//準備一個空的變數隨時接收自loadFile回傳的陣列檔案
+//接收到的檔案傳入chapt1元件作初始化
+  import chapt1 from "@/components/chapt1.vue";
+  import {loadChapter1} from "@/scripts/loadFile.js";
+
   export default {
+    components: {chapt1},
     data() {
         return {
             name: 'home',
@@ -36,6 +48,9 @@
               Episode_6: "friends6.jpg",
             },
             setList: [],
+          chapt1isVisible:false,
+          chapt1Data:'',
+          mainIsVisible:true
         };
     },
     async created() {
@@ -43,6 +58,12 @@
         console.log('Fetched sets:', this.set); // 檢查 this.set 是否已正確加載
         this.build_set_list();
         console.log(this.setList);
+      try{
+        const data = await loadChapter1("/src/dialogueData/subtitles_test2test.json");
+        this.chapt1Data = data;
+      }catch(error) {
+        console.error('Error loading data:', error);
+      }
     },
     methods: {
         async fetch_sets() {
@@ -76,7 +97,15 @@
         },
         goToHome() {
           this.currentPage = 'home'; // 設定為 'home'，顯示原本內容
-        }
+        },
+      showChapt1(){
+        this.chapt1isVisible = !this.chapt1isVisible
+        this.mainIsVisible = false;
+      },
+      closePage() {
+        this.chapt1isVisible = false;
+        this.mainIsVisible = true;
+      }
     }
   }
   </script>
