@@ -26,8 +26,9 @@
         <!-- navbar 的 item -->
         <div class="collapse navbar-collapse" id="mynavbar">
           <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <select class="form-select" id="topic-select">
+            <li class="nav-item my-auto">
+              <!-- 在下拉選單選擇主題時觸發一個事件，使用 v-model 將選擇的主題綁定到一個數據屬性 -->
+              <select class="form-select" id="topic-select" v-model="selectedTopic" @change="onTopicChange">
                       <option disabled value="">請選擇主題</option>
                       <option v-for="s in topicList" :key="s" :value="s">
                           {{ s }}
@@ -35,7 +36,7 @@
               </select>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://www.fcu.edu.tw">Information</a>
+              <router-link class="nav-link" to="/about" @click="$refs.offcanvas.hide()">About</router-link>
             </li>
             <li class="nav-item">
               <!-- LogIn要跳轉到 logIn.vue的設計畫面 -->
@@ -46,6 +47,25 @@
                 </svg>
               </a>
             </li>
+<<<<<<< Updated upstream
+=======
+
+    <!-- v-if -->
+            <li class="nav-item" v-if="isLoggedIn">
+            <router-link to="/memberPage" class="nav-link">
+              <img src="/img_logo/cat.png" style="width: 30px; height: 30px;">
+            </router-link>
+          </li>
+          <li class="nav-item" v-if="isLoggedIn">
+            <a class="nav-link" href="#" @click="logout">
+              Logout
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0z"/>
+              <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708z"/>
+              </svg>
+            </a>
+          </li>
+>>>>>>> Stashed changes
           </ul>
           <!-- Search 搜尋的位置 -->
           <form class="d-flex">
@@ -69,16 +89,19 @@
       <div class="offcanvas-body">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <router-link class="nav-link" aria-current="page" to="/">Home</router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
+            <router-link class="nav-link"  to="/about">About</router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Pricing</a>
+            <router-link class="nav-link"  to="/termsOfService">Service</router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
+            <router-link class="nav-link" aria-current="page" to="/privacyPolicy">Privacy Policy</router-link>
+          </li>
+          <li class="nav-item">
+            <router-link class="nav-link" to="/contact">Contact</router-link>
           </li>
         </ul>
       </div>
@@ -97,6 +120,7 @@ export default {
           "One Day",
           "The Regime",
           "Young Sheldon"
+<<<<<<< Updated upstream
         ]
       }
     },
@@ -105,6 +129,39 @@ export default {
     //     this.$router.push('/App');
     //   }
     // }
+=======
+        ],
+        isLoggedIn: false, // 預設為未登錄
+        selectedTopic: '',
+      };
+    },
+    methods: {
+      logout() {
+        // 清除 localStorage 中的 token
+        localStorage.removeItem('authToken');
+        
+        // 更新 isLoggedIn 狀態
+        this.isLoggedIn = false;
+
+        // 重定向到主頁
+        this.$router.push('/');
+      },
+      //選擇主題，並回傳給父，選擇了什麼主題
+      onTopicChange() {
+        this.$emit('topic-changed', this.selectedTopic);
+      },
+  },
+  watch: {
+    '$route'(to, from) {
+      // 當路由變化時，根據狀態更新 isLoggedIn
+      this.isLoggedIn = !!localStorage.getItem('authToken'); // 檢查 token 是否存在
+    }
+  },
+  mounted() {
+    // 初始化時檢查登錄狀態
+    this.isLoggedIn = !!localStorage.getItem('authToken'); // 檢查 token 是否存在
+  }
+>>>>>>> Stashed changes
 };
 </script>
 

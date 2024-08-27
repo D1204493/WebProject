@@ -1,7 +1,7 @@
 
 <template>
 
-  <img class="card-img-top img-fluid" :src="'/img2/' + setImg" alt="Card image" >
+  <img class="card-img-top img-fluid" :src="'/img/' + setImg" alt="Card image" >
   <div class="card-body">
       <h5 class="card-title">{{ setName }}</h5>
       <p class="card-text">Some example text some example text.
