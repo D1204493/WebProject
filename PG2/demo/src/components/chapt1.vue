@@ -57,13 +57,17 @@ export default {
       }
       this.answeredStatus[index] = 1;
       this.totalScore += 1;
+      this.checkScore();
 
+    },
+    checkScore(){
       if(this.totalScore === 10) {
         const finalScore = document.querySelector('.currentScore');
         finalScore.classList.add('text-success');
+        alert("恭喜! 你已經完成本章節所有題目!");
         this.sendCompleteChaptorMessage();
-      }
-    },
+    }
+      },
     showFailIcon(index){
       const resultIcon = document.querySelectorAll('.result_icon')[index];
       if (resultIcon) {
@@ -100,11 +104,13 @@ export default {
     },
     sendCompleteChaptorMessage() {
       this.$emit('sendCompleteChaptorMessage');
+    },
+    test(){
+      this.totalScore = 10;
+      this.checkScore();
     }
 
   },
-
-
 
   mounted() {
     const dialContainer = document.getElementById("dialContainer");
@@ -139,6 +145,7 @@ export default {
   <div class="d-flex justify-content-center m-4">
     <button class="btn btn-success w-25" @click.stop="closePgn">返回</button>
   </div>
+   
 </template>
 
 <style scoped>

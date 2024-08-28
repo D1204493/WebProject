@@ -9,15 +9,19 @@
     },
     {
         "chinese": "少來了  你們都在約會了",
-        "english": "C'mon, you're going out with the guy!"
+        "english": "Come on you are going out with the guy!"
     },
     {
         "chinese": "這個男人一定有什麼問題",
         "english": "There is gotta be something wrong with him"
     },
     {
-        "chinese": "他是駝背嗎  戴着假髮的駝背",
-        "english": "So does he have a hump? A hump and a hairpiece?"
+        "chinese": "他是駝背嗎  ",
+        "english": "So does he have a hump"
+    },
+    {
+        "chinese":"戴着假髮的駝背" ,
+        "english": "A hump and a hairpiece"
     },
     {
         "chinese": "等等  他喫粉筆嗎",
@@ -32,8 +36,12 @@
         "english": "what I went through with Carl"
     },
     {
-        "chinese": "拜託各位  放鬆點  這甚至不算是約會",
-        "english": "Okay everybody relax. This is not even a date."
+        "chinese": "拜託各位  放鬆點 ",
+        "english": "Okay everybody relax"
+    },
+    {
+        "chinese": "這甚至不算是約會",
+        "english": "This is not even a date"
     },
     {
         "chinese": "只不過是兩個人出去喫個飯",
@@ -49,11 +57,11 @@
     },
     {
         "chinese": "於是我回到了高中學校",
-        "english": "All right, so I'm back in high school,"
+        "english": "All right  so I am back in high school"
     },
     {
         "chinese": "我站在食堂中間",
-        "english": "I'm standing in the middle of the cafeteria"
+        "english": "I am standing in the middle of the cafeteria"
     },
     {
         "chinese": "然後發現自己全身赤裸",
@@ -61,7 +69,7 @@
     },
     {
         "chinese": "噢  做過那種夢",
-        "english": "Oh, yeah. Had that dream."
+        "english": "Oh yeah had that dream"
     },
     {
         "chinese": "然後我低下頭  看見那裏有一部",
@@ -72,12 +80,12 @@
         "english": "there"
     },
     {
-        "chinese": "-那話兒變成了  -沒錯",
-        "english": "- Instead of...?  - That's right."
+        "chinese": "那話兒變成了  -沒錯",
+        "english": "Instead of...?  - That's right."
     },
     {
-        "chinese": "-這種夢倒從未做過  -沒有",
-        "english": "- Never had that dream. - No."
+        "chinese": "這種夢倒從未做過 ",
+        "english": "Never had that dream"
     },
     {
         "chinese": "突然  那電話響起來了",
@@ -85,11 +93,11 @@
     },
     {
         "chinese": "結果是我媽打來的",
-        "english": "And it turns out it's my mother"
+        "english": "And it turns out it is my mother"
     },
     {
-        "chinese": "這非常非常奇怪",
-        "english": "which is very-very weird because-"
+        "chinese": "這非常非常奇怪,因為..",
+        "english": "which is very very weird because"
     },
     {
         "chinese": "因爲她從來不打電話給我",
