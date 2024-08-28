@@ -1,153 +1,112 @@
 
 <template>
-  <main>
+<div class="html1">
+  <div class="body1">
+   <main>
         <div class="wrapper">
             <div class="content">
                 <div class="ig-img">
-                    <img class="img-ig" src="/PG/demo/public/img_logo/logo.png" alt="logo">
+                    <router-link to="/" class="nav-link">
+                        <img class="img-ig" src="/img_logo/logo.png" alt="logo">
+                    </router-link>
                 </div>
-                <form autocomplete="off" id="signupForm" action="">
+                <form @submit.prevent="handleSubmit" autocomplete="off" id="signupForm" action="">
                     <div class="input-group">
                         <label>
-                            <input type="text" id="username" required>
+                            <input v-model="form.username" type="text" id="username" required>
                             <span>Username</span>
                         </label>
                         <label>
-                            <input type="text" id="phonenumber" required>
+                            <input v-model="form.phonenumber" type="text" id="phonenumber" required>
                             <span>Phone Number</span>
                         </label>
                         <label>
-                            <input type="text" id="email" required>
+                            <input v-model="form.email" type="text" id="email" required>
                             <span>Email</span>
                         </label>
                         <label class="label">
-                            <input type="password" id="password" required>
+                            <input v-model="form.password" :type="passwordType" id="password" required>
                             <span>Password</span>
-                            <button type="button" id="togglePassword" class="showhide">Show</button>
+                            <button type="button" @click="togglePassword" id="togglePassword" class="showhide">
+                                {{ passwordType === 'password' ? 'Show' : 'Hide' }}
+                            </button>
                         </label>
                     </div>
-                    <button id="signupButton" disabled>Sign up</button>
+                    <button id="signupButton" :disabled="!isFormValid">Sign up</button>
+                  <div v-if="errorMessage" style="color: red; margin-top: 10px;">{{ errorMessage }}</div>
                 </form>
-                
             </div>
         </div>
-        
     </main>
+  </div>
+</div>
 </template>
   
 
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("signupForm");
-    const signupButton = document.getElementById("signupButton");
-    const inputs = form.querySelectorAll("input");
-    const errorMessage = document.createElement("div");
-    errorMessage.style.color = "red";
-    errorMessage.style.marginTop = "10px";
-    form.appendChild(errorMessage);
-
-    // 檢查所有輸入欄位是否已填寫
-    function checkInputs() {
-        let allFilled = true;
-        let emptyFields = [];
-
-        inputs.forEach(input => {
-            if (input.value.trim() === "") {
-                allFilled = false;
-                emptyFields.push(input.previousElementSibling.textContent.trim());
-            }
-        });
-
-        if (allFilled) {
-            signupButton.removeAttribute("disabled");
-            errorMessage.textContent = "";
-        } else {
-            signupButton.setAttribute("disabled", "true");
-            errorMessage.textContent = `請填寫以下欄位：${emptyFields.join(", ")}`;
-        }
+export default {
+  name: 'signUp',
+  data() {
+    return {
+      form: {
+        username: '',
+        phonenumber: '',
+        email: '',
+        password: ''
+      },
+      passwordType: 'password',
+      errorMessage: ''
+    };
+  },
+  computed: {
+    isFormValid() {
+      return Object.values(this.form).every(value => value.trim() !== '');
     }
+  },
+  methods: {
+    handleSubmit() {
+      if (!this.isFormValid) {
+        this.errorMessage = '請填寫所有必填欄位';
+        return;
+      }
 
-    // 為每個輸入欄位添加事件監聽器
-    inputs.forEach(input => {
-        input.addEventListener("input", checkInputs);
-    });
+      const userData = {
+        username: this.form.username,
+        phonenumber: this.form.phonenumber,
+        email: this.form.email,
+        password: this.form.password
+      };
 
-    // 切換密碼可見性
-    document.getElementById("togglePassword").addEventListener("click", function () {
-        const passwordInput = document.getElementById("password");
-        const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
-        passwordInput.setAttribute("type", type);
-        this.textContent = type === "password" ? "Show" : "Hide";
-    });
+      localStorage.setItem('userData', JSON.stringify(userData));
 
-    // 處理表單提交
-    form.addEventListener("submit", function (event) {
-        event.preventDefault();
+      console.log('Stored user data:', JSON.parse(localStorage.getItem('userData')));
 
-        if (!form.checkValidity()) {
-            errorMessage.textContent = "請填寫所有必填欄位";
-            return;
-        }
-
-        const username = document.getElementById("username").value;
-        const phonenumber = document.getElementById("phonenumber").value;
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-
-        // 創建 JSON 對象
-        const userData = {
-            username: username,
-            phonenumber: phonenumber,
-            email: email,
-            password: password
-        };
-
-        // 將 JSON 對象存儲到 localStorage
-        localStorage.setItem("userData", JSON.stringify(userData));
-
-        // 在控制台中記錄存儲的數據
-        console.log("Stored user data:", JSON.parse(localStorage.getItem("userData")));
-
-        // 重定向到另一個頁面
-        window.location.href = "test_logIn.html";
-    });
-});
+      this.$router.push('/logIn');
+    },
+    togglePassword() {
+      this.passwordType = this.passwordType === 'password' ? 'text' : 'password';
+    }
+  }
+};
 </script>
   
 
 
-<style>
-        * {
+<style scoped>
+        .html1 {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: sans-serif;
         }
     
-        body {
+        .body1 {
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             background-color: #f0f0f0;
-        }
-
-        /* 背景浮水印 */
-        body::after {
-            content: "";
-            background-image: url('wall2.png');
-            background-repeat: no-repeat;
-            background-position: left center;
-            background-size: contain;
-            opacity: 0.2;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            position: fixed;
-            z-index: -1;
-            pointer-events: none;
         }
     
         .wrapper {
@@ -159,9 +118,6 @@ document.addEventListener("DOMContentLoaded", function () {
             text-align: center;
             background: #fff;
             margin-bottom: 10px;
-            /* 下面兩個是背景浮水印用 */
-            position: relative;
-            z-index: 1;
         }
     
         .ig-img {

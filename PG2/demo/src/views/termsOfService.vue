@@ -1,0 +1,104 @@
+<template>
+
+<!-- 導航列 -->
+<navbar />
+<div style="padding-top: 20px;">
+<div class="container content">
+        <h2>使用條款</h2>
+        <p>歡迎使用 <span class="highlight">Voice Mastery</span> 英文學習網站（以下簡稱「本網站」）。在使用本網站之前，請您詳細閱讀以下使用條款（以下簡稱「條款」）。使用本網站即表示您同意遵守這些條款。如果您不同意這些條款，請勿使用本網站。</p>
+        
+        <h3>1. 使用者行為</h3>
+        <p>您同意在使用本網站時遵守所有適用的法律法規，並且不從事以下行為：</p>
+        <ul>
+            <li>發佈任何非法、有害、威脅、侮辱、騷擾、誹謗、淫穢、仇恨或其他不當內容。</li>
+            <li>冒充他人或偽造您的身份以誤導他人。</li>
+            <li>發送或散佈未經請求的廣告、垃圾郵件或其他形式的徵集。</li>
+            <li>侵犯他人的知識產權或其他合法權利。</li>
+            <li>干擾或損害本網站的正常運行或其他用戶的使用。</li>
+        </ul>
+        
+        <h3>2. 知識產權</h3>
+        <p>本網站所提供的內容，包括但不限於文字、圖片、視頻、音頻、軟件及其相關代碼（以下簡稱「內容」），均屬於本網站或其授權人擁有的知識產權。除非得到本網站或相關權利人的明確許可，否則您不得擅自使用、複製、發佈、修改、翻譯或創作衍生作品。</p>
+
+        <h3>3. 使用者賬號</h3>
+        <p>您可能需要註冊賬號才能使用本網站的某些功能。您有責任確保您的賬號信息的準確性和安全性，並對所有使用您的賬號進行的活動負責。如果發現賬號有未經授權的使用，請立即通知我們。</p>
+
+        <h3>4. 隱私政策</h3>
+        <p>我們非常重視您的隱私，請參閱我們的隱私政策了解更多信息。</p>
+        
+        <h3>5. 免責聲明</h3>
+        <p>本網站提供的內容僅供參考，我們不保證其準確性、完整性或適用性。本網站不對您因使用或無法使用本網站而遭受的任何直接或間接損失負責。</p>
+
+        <h3>6. 條款的變更</h3>
+        <p>本網站保留隨時修改這些條款的權利。修改後的條款一經公佈即生效，請您定期查閱。如果您在條款修改後繼續使用本網站，即表示您同意這些修改。</p>
+
+        <h3>7. 終止服務</h3>
+        <p>如果您違反了這些條款或法律法規，本網站有權在不另行通知的情況下終止或限制您的使用權利。</p>
+
+        <h3>8. 聯絡我們</h3>
+        <p>如果您對這些條款有任何疑問或意見，請通過我們的<router-link to="/contact">聯絡我們</router-link>頁面與我們聯繫。</p>
+    </div>
+</div>
+<!--footer-->
+
+<web-footer />
+
+</template>
+
+<script>
+export default {
+    // 此處無需特別邏輯
+}
+</script>
+
+<style scoped>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: auto;
+  margin: auto;
+  overflow: hidden;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  min-height: 80vh;
+}
+
+.content {
+    padding: 20px;
+    flex: 1;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+p {
+  margin-bottom: 20px;
+  text-align: justify;
+}
+
+ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+ul li {
+  margin-bottom: 10px;
+}
+
+.highlight {
+  color: #007bff;
+  font-weight: bold;
+}
+</style>
