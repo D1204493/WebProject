@@ -1,7 +1,7 @@
 
 <template>
 
-  <img class="card-img-top img-fluid" :src="'/img/' + setImg" alt="Card image" >
+  <img class="card-img-top img-fluid  " :src="'/img/' + setImg" alt="Card image" >
   <div class="card-body">
       <h5 class="card-title">{{ setName }}</h5>
       <p class="card-text">Some example text some example text.
@@ -29,8 +29,8 @@
 
                   <!-- Modal footer -->
                   <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Enter</button>
-                  </div>   
+                  <button type="button" class="btn btn-primary" @click="showChapt1" data-bs-dismiss="modal" >Enter</button>
+                  </div>
               </div>
           </div>
       </div>
@@ -42,6 +42,21 @@
 <script>
 export default {
 props: ['setName', 'setImg'],
+  methods:{
+    showChapt1() {
+      this.$emit('showChapt1');
+    }
+  },
+  //cards被創建以後,初始透明度為0,以下代碼將執行每張卡片透明度依序設定為1
+  mounted() {
+    const cards = document.getElementsByClassName('country-card');
+    for (let i = 0; i < cards.length; i++) {
+      // 使用 setTimeout 来延遲透明度的改變
+      setTimeout(() => {
+        cards[i].style.opacity = 1;
+      }, i * 120);
+    }
+  }
 } 
 
 </script>
@@ -58,6 +73,8 @@ props: ['setName', 'setImg'],
   width: 30%;
   margin: 10px;
   padding: 10px;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
 }
 
 .card-img-top {
