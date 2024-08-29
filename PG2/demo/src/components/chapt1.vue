@@ -8,8 +8,8 @@ export default {
     return {
       answeredStatus:[],
       totalScore:0,
-      activeIndex: null,  // 用于跟踪当前互动的对话区块
-      correctIndex: null  // 用于跟踪当前互动的对话区块
+      activeIndex: null,  
+      correctIndex: null  
     };
   },
   props:{
@@ -40,7 +40,7 @@ export default {
         this.expandSection(index, false);
         if (isCorrect) {
           this.correctIndex = index;
-          this.showSuccessIcon(index); // 直接显示成功图标
+          this.showSuccessIcon(index); 
           console.log("correct");
         } else {
           this.correctIndex = null;
@@ -48,7 +48,7 @@ export default {
           console.log("no luck")
         }
       });
-      checkSpeech(); // 启动语音识别
+      checkSpeech(); 
     },
     showSuccessIcon(index) {
       const resultIcon = document.querySelectorAll('.result_icon')[index];
@@ -76,19 +76,22 @@ export default {
       }
     },
     showRecordingMessage(index) {
+      const buttons = document.querySelectorAll('.startBtn');
       const recordingMessage = document.querySelectorAll('.recording')[index];
       const currentStartBtn = document.querySelectorAll('.startBtn')[index];
       recordingMessage.style.opacity = '1';
-      currentStartBtn.disabled = true;
-      currentStartBtn.classList.add('btn-secondary');
-      currentStartBtn.classList.remove('btn-primary');
-      currentStartBtn.innerText = '請稍候';
+      buttons.forEach(button =>{
+        button.disabled = true;
+        button.classList.add('btn-secondary');
+        button.classList.remove('btn-primary');
+      })
       setTimeout((index) => {
         recordingMessage.style.opacity = '0';
-        currentStartBtn.disabled = false;
-        currentStartBtn.classList.add('btn-primary');
-        currentStartBtn.classList.remove('btn-secondary');
-        currentStartBtn.innerText = '開始!';
+        buttons.forEach(button => {
+          button.disabled=false;
+          button.classList.add('btn-primary');
+          button.classList.remove('btn-secondary');
+        })
       },6500)
     },
     expandSection (index, expand) {
